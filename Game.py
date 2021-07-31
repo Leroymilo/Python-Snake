@@ -7,11 +7,11 @@ from pygame.locals import *
 import os
 import sys
 
-#Fonctions :
+#Functions :
 
 def newFruit():
     """
-    Génère un nouveau fruit.
+    Generates a new fruit.
     """
     xf, yf = rd.randint(0, w-1), rd.randint(0, h-1)
     while (xf, yf) in snake :
@@ -20,7 +20,7 @@ def newFruit():
     
 def snakeAndFruitInGrille(grille, snake, xf, yf):
     """
-    Nettoie la grille et réinsère le serpet et le fruit à leur place dans la grille.
+    Clean the grid and put the Snake and Fruit back into it.
     """
     grille = np.zeros((w, h), dtype = 'int')
     for part in snake :
@@ -31,7 +31,7 @@ def snakeAndFruitInGrille(grille, snake, xf, yf):
     
 def printin(grille):
     """
-    Affiche le contenu du tableau principal sur l'écran.
+    Display on screen what's inside the main table.
     """
     Fenetre.fill((0, 0, 0))
     
@@ -47,7 +47,7 @@ def printin(grille):
     pygame.display.flip()
     return None
 
-#Initialisation des variables :
+#Variables initialisation :
 
 Dir = 0
 delta = 50
@@ -56,7 +56,7 @@ delay = 200
 lose = False
 restart = False
 
-#Initialisation de pygame :
+#Pygame initialisation:
 
 pygame.init()
 
@@ -67,7 +67,7 @@ continuer = True
 
 pygame.key.set_repeat(50, 50)
 
-#Préparation des textes :
+#Preloading the texts :
 
 all_fonts = pygame.font.get_fonts()
 if "comicsansms" in all_fonts :
@@ -80,7 +80,7 @@ pausetext = font.render("Pause, press escape to return to the game.", True, (127
 wintext1 = font.render("You won !", True, (0, 0, 0))
 wintext2 = font.render("Press Spacebar to play again.", True, (0, 0, 0))
 
-#Initialisation du jeu :
+#Game initialisation :
 
 grille = np.zeros((w, h), dtype = 'int')
 x, y = 6, 6
@@ -89,7 +89,7 @@ xf, yf = newFruit()
 grille = snakeAndFruitInGrille(grille, snake, xf, yf)
 printin(grille)
 
-#Création de la boucle créant un délai de 0.8s et guettant les évènements :
+#Creates the loop with a 0.8s delay while searching for events :
 
 while continuer:
     time = pygame.time.get_ticks()
@@ -106,7 +106,7 @@ while continuer:
             if event.type == KEYDOWN :
                 move = False
 
-#Changement de directions :
+#Direction changes :
                 
                 if event.key == K_RIGHT and prevDir != 2:
                     Dir = 0
@@ -146,7 +146,7 @@ while continuer:
                     pygame.key.set_repeat(50, 50)
                     printin(grille)
 
-#Changement du délai en jeu :
+#Changing the delay :
 
                 if event.key == K_d :
                     delay = int(input("Cheater! New delay in ms : "))
@@ -172,7 +172,7 @@ while continuer:
                     pygame.key.set_repeat(50, 50)
                     printin(grille)
 
-#Application du changement de direction :
+#Applying the direction change :
                                     
     prevx, prevy = x, y
     if Dir == 0 :
@@ -184,7 +184,7 @@ while continuer:
     if Dir == 3 :
         y -= 1
 
-#Vérification des collisions :
+#Checking collisions :
         
     if not (0 <= x <= w-1 and 0 <= y <= h-1):
         lose = True
@@ -198,7 +198,7 @@ while continuer:
 
         snake.append((x, y))
 
-        #Vérification de victoire :
+        #Checking victory conditions (never tested because I'm bad) :
 
         if len(snake) == w*h :
             Fenetre.blit(wintext1, ((delta*w-wintext1.get_width())//2, (delta*h)//2-wintext1.get_height))
@@ -216,21 +216,21 @@ while continuer:
                         sys.exit()
 
         else :
-            #Vérification de collision avec le fruit :
+            #Checking fruit collision :
 
             if (x, y) == (xf, yf) :
                 xf, yf = newFruit()
             else :
                 snake.pop(0)
 
-            #Actualisation et affichage de la grille :
+            #Actualisation and display :
 
             grille = snakeAndFruitInGrille(grille, snake, xf, yf)
             printin(grille)
             
     else :
 
-        #Affichage de la défaite et boucle de restart.
+        #Display of death and restart initialisation.
         
         Fenetre.blit(losetext, ((delta*w-losetext.get_width())//2, (delta*h-losetext.get_height())//2))
         pygame.display.flip()
@@ -245,7 +245,7 @@ while continuer:
                     pygame.quit()
                     sys.exit()
 
-    #Réinitialisation du jeu :
+    #Reset :
 
     if restart :
         grille = np.zeros((w, h), dtype = 'int')
